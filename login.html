@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in or create a free CineVault account to save your watchlist and discover where to stream movies and series.">
+    <title>CineVault | Sign In & Create Account</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+
+    <style>
+        /* Page-specific enhancements */
+        .auth-split-layout {
+            flex: 1;
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* Left panel — decorative showcase */
+        .auth-promo-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #0A0A0F 0%, #12071A 50%, #0D0D14 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-promo-panel::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(229,9,20,0.18) 0%, transparent 65%);
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .auth-promo-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(120,40,200,0.12) 0%, transparent 65%);
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .promo-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(229,9,20,0.12);
+            border: 1px solid rgba(229,9,20,0.25);
+            border-radius: 99px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #FF6666;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .promo-headline {
+            font-size: clamp(28px, 3.2vw, 44px);
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+            color: #F5F5F7;
+        }
+
+        .promo-headline .highlight {
+            background: linear-gradient(135deg, #E50914, #FF6B6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .promo-subtext {
+            font-size: 15px;
+            color: rgba(255,255,255,0.52);
+            line-height: 1.7;
+            max-width: 380px;
+            margin-bottom: 40px;
+        }
+
+        .promo-benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .promo-benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .benefit-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .benefit-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.4;
+        }
+
+        .benefit-text strong {
+            color: #F5F5F7;
+            display: block;
+            font-weight: 600;
+        }
+
+        /* Right panel — form */
+        .auth-form-panel {
+            width: 480px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 48px;
+            background: var(--bg, #0A0A0F);
+            border-left: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* Password strength indicator */
+        .pwd-strength-bar {
+            height: 3px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.08);
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .pwd-strength-fill {
+            height: 100%;
+            border-radius: 99px;
+            width: 0%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .pwd-strength-fill.weak   { width: 25%; background: #E50914; }
+        .pwd-strength-fill.fair   { width: 50%; background: #FF9F0A; }
+        .pwd-strength-fill.good   { width: 75%; background: #30D158; }
+        .pwd-strength-fill.strong { width: 100%; background: #30D158; }
+
+        .pwd-strength-text {
+            font-size: 11px;
+            color: var(--text-muted, #555);
+            margin-top: 4px;
+        }
+
+        /* Back arrow button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary, #999);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary, #fff);
+        }
+
+        /* Success animation overlay */
+        .auth-success-overlay {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+            animation: modalScaleIn 0.4s ease-out;
+        }
+
+        .auth-success-overlay.show {
+            display: flex;
+        }
+
+        .success-icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(70, 211, 105, 0.15);
+            border: 2px solid rgba(70, 211, 105, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .auth-promo-panel {
+                display: none;
+            }
+
+            .auth-form-panel {
+                width: 100%;
+                padding: 40px 24px;
+            }
+
+            .auth-split-layout {
+                min-height: calc(100vh - 70px);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .auth-form-panel {
+                padding: 28px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-body">
+
+    <!-- MINIMAL AUTH NAVBAR -->
+    <header class="auth-nav">
+        <a href="landing.html" class="logo" aria-label="CineVault Home" style="text-decoration:none;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="logo-badge">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                    </svg>
+                </div>
+                <span style="font-size:18px; font-weight:800; color:var(--text-primary, #F5F5F7);">CineVault</span>
+            </div>
+        </a>
+
+        <a href="index.html" style="font-size:13px; color:var(--text-secondary, #999); text-decoration:none; transition:color 0.2s;"
+           onmouseover="this.style.color='#F5F5F7'" onmouseout="this.style.color=''">
+            Browse as Guest &#x2197;
+        </a>
+    </header>
+
+
+    <!-- MAIN LAYOUT: PROMO LEFT + FORM RIGHT -->
+    <div class="auth-split-layout">
+
+        <!-- LEFT: PROMO PANEL -->
+        <div class="auth-promo-panel" aria-hidden="true">
+            <div class="promo-label">
+                <span>&#x1F3AC;</span>
+                <span>CineVault Discovery</span>
+            </div>
+
+            <h2 class="promo-headline">
+                Your Personal<br>
+                <span class="highlight">Movie Universe</span><br>
+                Starts Here.
+            </h2>
+
+            <p class="promo-subtext">
+                Create a free account to save your watchlist, track what you've viewed, and instantly find where to stream 80+ top titles legally.
+            </p>
+
+            <div class="promo-benefits">
+                <div class="promo-benefit-item">
+                    <div class="benefit-icon-wrap">&#x1F4E1;</div>
+                    <div class="benefit-text">
+                        <strong>Legal Streaming Links</strong>
+                        Netflix, Prime, JioHotstar &amp; more in one place.
+                    </div>
+                </div>
+                <div class="promo-benefit-item">
+                    <div class="benefit-icon-wrap">&#x1F516;</div>
+                    <div class="benefit-text">
+                        <strong>Synced Watchlist</strong>
+                        Save titles and access them from any device.
+                    </div>
+                </div>
+                <div class="promo-benefit-item">
+                    <div class="benefit-icon-wrap">&#x26A1;</div>
+                    <div class="benefit-text">
+                        <strong>Instant Discovery</strong>
+                        Live search &amp; genre filters across 80+ curated titles.
+                    </div>
+                </div>
+                <div class="promo-benefit-item">
+                    <div class="benefit-icon-wrap">&#x1F195;</div>
+                    <div class="benefit-text">
+                        <strong>100% Free, Always</strong>
+                        No subscription required for CineVault itself.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RIGHT: FORM PANEL -->
+        <div class="auth-form-panel">
+
+            <!-- SUCCESS STATE (shown after successful auth) -->
+            <div class="auth-success-overlay" id="successOverlay">
+                <div class="success-icon-circle">&#x2713;</div>
+                <div>
+                    <h3 style="font-size:20px; font-weight:800; margin-bottom:6px;" id="successTitle">Welcome to CineVault!</h3>
+                    <p style="font-size:14px; color:var(--text-secondary, #999);" id="successSubtitle">Redirecting you to the app&#x2026;</p>
+                </div>
+                <div style="width:200px; height:3px; border-radius:99px; background:rgba(255,255,255,0.1); overflow:hidden; margin-top:8px;">
+                    <div id="redirectBar" style="height:100%; width:0%; background:var(--accent,#E50914); border-radius:99px; transition:width 2s linear;"></div>
+                </div>
+            </div>
+
+
+            <!-- MAIN FORM AREA -->
+            <div id="mainFormArea" style="width:100%; max-width:400px;">
+
+                <!-- Auth Card -->
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="auth-brand-badge">
+                            <div class="logo-badge" style="width:28px;height:28px;">
+                                <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                    <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                                </svg>
+                            </div>
+                            CineVault
+                        </div>
+                    </div>
+
+                    <!-- TAB SWITCHER -->
+                    <div class="auth-tabs-wrap" role="tablist">
+                        <button class="auth-tab-btn active" id="tabLogin" role="tab" aria-selected="true" onclick="switchTab('login')">
+                            Sign In
+                        </button>
+                        <button class="auth-tab-btn" id="tabSignup" role="tab" aria-selected="false" onclick="switchTab('signup')">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <!-- ALERT BOX -->
+                    <div class="auth-alert" id="authAlert" role="alert" aria-live="polite"></div>
+
+                    <!-- GOOGLE SIGN IN -->
+                    <button class="btn-google" id="googleBtn" onclick="handleGoogleAuth()">
+                        <svg viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+
+                    <div class="auth-divider">or</div>
+
+                    <!-- ==================== LOGIN FORM ==================== -->
+                    <div id="loginView">
+                        <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+                            <div class="form-group">
+                                <label class="form-label" for="loginEmail">Email Address</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="email"
+                                        id="loginEmail"
+                                        class="form-input"
+                                        placeholder="you@example.com"
+                                        autocomplete="email"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="loginPassword">Password</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="password"
+                                        id="loginPassword"
+                                        class="form-input"
+                                        placeholder="Your password"
+                                        autocomplete="current-password"
+                                        style="padding-right: 44px;"
+                                        required
+                                    >
+                                    <button type="button" class="pwd-toggle-btn" onclick="togglePwd('loginPassword', this)" aria-label="Toggle password visibility">
+                                        &#x1F441;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row-between">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="rememberMe"> Remember me
+                                </label>
+                                <button type="button" class="forgot-link" onclick="showResetView()">
+                                    Forgot password?
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn-auth-submit" id="loginSubmitBtn">
+                                Sign In to CineVault
+                            </button>
+                        </form>
+
+                        <div class="guest-continue-wrap">
+                            <span class="guest-link" onclick="handleGuestLogin()">
+                                Continue as Guest &#x2192;
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <!-- ==================== SIGNUP FORM ==================== -->
+                    <div id="signupView" style="display:none;">
+                        <form id="signupForm" onsubmit="handleSignup(event)" novalidate>
+                            <div class="form-group">
+                                <label class="form-label" for="signupName">Full Name</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="text"
+                                        id="signupName"
+                                        class="form-input"
+                                        placeholder="Your name"
+                                        autocomplete="name"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="signupEmail">Email Address</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="email"
+                                        id="signupEmail"
+                                        class="form-input"
+                                        placeholder="you@example.com"
+                                        autocomplete="email"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="signupPassword">Password</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="password"
+                                        id="signupPassword"
+                                        class="form-input"
+                                        placeholder="Create a strong password"
+                                        autocomplete="new-password"
+                                        style="padding-right: 44px;"
+                                        oninput="updatePasswordStrength(this.value)"
+                                        required
+                                    >
+                                    <button type="button" class="pwd-toggle-btn" onclick="togglePwd('signupPassword', this)" aria-label="Toggle password visibility">
+                                        &#x1F441;
+                                    </button>
+                                </div>
+                                <div class="pwd-strength-bar">
+                                    <div class="pwd-strength-fill" id="pwdStrengthFill"></div>
+                                </div>
+                                <div class="pwd-strength-text" id="pwdStrengthText"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="signupConfirmPassword">Confirm Password</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="password"
+                                        id="signupConfirmPassword"
+                                        class="form-input"
+                                        placeholder="Repeat your password"
+                                        autocomplete="new-password"
+                                        style="padding-right: 44px;"
+                                        required
+                                    >
+                                    <button type="button" class="pwd-toggle-btn" onclick="togglePwd('signupConfirmPassword', this)" aria-label="Toggle confirm password visibility">
+                                        &#x1F441;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 20px;">
+                                <label class="checkbox-label" style="font-size:12.5px; color:var(--text-secondary);">
+                                    <input type="checkbox" id="agreeTerms" required>
+                                    I agree to the <a href="javascript:void(0)" style="color:var(--accent,#E50914);">Terms of Service</a> and <a href="javascript:void(0)" style="color:var(--accent,#E50914);">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-auth-submit" id="signupSubmitBtn">
+                                Create Free Account
+                            </button>
+                        </form>
+
+                        <div class="guest-continue-wrap">
+                            <span class="guest-link" onclick="handleGuestLogin()">
+                                Skip for now &#x2014; Browse as Guest &#x2192;
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <!-- ==================== FORGOT PASSWORD VIEW ==================== -->
+                    <div id="resetView" style="display:none;">
+                        <button class="back-btn" onclick="showLoginView()">
+                            &#x2190; Back to Sign In
+                        </button>
+                        <div class="auth-header" style="text-align:left; margin-bottom:20px;">
+                            <div class="auth-title" style="font-size:22px;">Reset Password</div>
+                            <p class="auth-subtitle">Enter your email and we'll send you a reset link.</p>
+                        </div>
+
+                        <form id="resetForm" onsubmit="handleReset(event)" novalidate>
+                            <div class="form-group">
+                                <label class="form-label" for="resetEmail">Email Address</label>
+                                <div class="form-input-wrap">
+                                    <input
+                                        type="email"
+                                        id="resetEmail"
+                                        class="form-input"
+                                        placeholder="you@example.com"
+                                        autocomplete="email"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-auth-submit" id="resetSubmitBtn">
+                                Send Reset Email
+                            </button>
+                        </form>
+                    </div>
+
+                </div><!-- /.auth-card -->
+
+                <!-- Bottom disclaimer -->
+                <p style="text-align:center; margin-top:20px; font-size:12px; color:rgba(255,255,255,0.3); line-height:1.6;">
+                    By continuing, you acknowledge that CineVault is a discovery database &#x2014; it does not host or stream any video content. External streaming services may require separate subscriptions.
+                </p>
+
+            </div><!-- /#mainFormArea -->
+
+        </div><!-- /.auth-form-panel -->
+
+    </div><!-- /.auth-split-layout -->
+
+
+    <!-- PAGE SCRIPTS -->
+    <script>
+        /* ====================================================
+           1. URL PARAMETER — read ?mode=login or ?mode=signup
+        ==================================================== */
+        const urlParams = new URLSearchParams(window.location.search);
+        const modeParam = urlParams.get('mode');
+        if (modeParam === 'signup') {
+            switchTab('signup');
+        }
+
+        /* ====================================================
+           2. AUTO-REDIRECT IF ALREADY LOGGED IN
+        ==================================================== */
+        onAuthChange((user) => {
+            if (user && !user.isAnonymous) {
+                window.location.href = 'index.html';
+            }
+        });
+
+
+        /* ====================================================
+           3. TAB SWITCHING
+        ==================================================== */
+        function switchTab(mode) {
+            const loginView  = document.getElementById('loginView');
+            const signupView = document.getElementById('signupView');
+            const tabLogin   = document.getElementById('tabLogin');
+            const tabSignup  = document.getElementById('tabSignup');
+            const resetView  = document.getElementById('resetView');
+            const googleBtn  = document.getElementById('googleBtn');
+            const divider    = document.querySelector('.auth-divider');
+
+            resetView.style.display  = 'none';
+            loginView.style.display  = mode === 'login'  ? 'block' : 'none';
+            signupView.style.display = mode === 'signup' ? 'block' : 'none';
+
+            tabLogin.classList.toggle('active',  mode === 'login');
+            tabSignup.classList.toggle('active', mode === 'signup');
+            tabLogin.setAttribute('aria-selected',  String(mode === 'login'));
+            tabSignup.setAttribute('aria-selected', String(mode === 'signup'));
+
+            googleBtn.style.display = '';
+            if (divider) divider.style.display = '';
+
+            clearAlert();
+        }
+
+
+        /* ====================================================
+           4. RESET PASSWORD VIEW
+        ==================================================== */
+        function showResetView() {
+            document.getElementById('loginView').style.display  = 'none';
+            document.getElementById('signupView').style.display = 'none';
+            document.getElementById('resetView').style.display  = 'block';
+            document.getElementById('googleBtn').style.display  = 'none';
+            const divider = document.querySelector('.auth-divider');
+            if (divider) divider.style.display = 'none';
+            clearAlert();
+        }
+
+        function showLoginView() {
+            switchTab('login');
+        }
+
+
+        /* ====================================================
+           5. HANDLERS
+        ==================================================== */
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email    = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn      = document.getElementById('loginSubmitBtn');
+
+            if (!email || !password) {
+                showAlert('error', 'Please fill in your email and password.');
+                return;
+            }
+
+            setLoading(btn, true, 'Signing In\u2026');
+            clearAlert();
+            try {
+                const user = await loginUser(email, password);
+                showSuccessAndRedirect('Welcome back, ' + (user.displayName || 'Cinephile') + '! \uD83C\uDFAC', 'index.html');
+            } catch (err) {
+                showAlert('error', err.message);
+                setLoading(btn, false, 'Sign In to CineVault');
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const name     = document.getElementById('signupName').value.trim();
+            const email    = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirm  = document.getElementById('signupConfirmPassword').value;
+            const agreed   = document.getElementById('agreeTerms').checked;
+            const btn      = document.getElementById('signupSubmitBtn');
+
+            if (!name)               { showAlert('error', 'Please enter your full name.'); return; }
+            if (!email)              { showAlert('error', 'Please enter your email address.'); return; }
+            if (!password)           { showAlert('error', 'Please create a password.'); return; }
+            if (password.length < 6) { showAlert('error', 'Password must be at least 6 characters.'); return; }
+            if (password !== confirm) { showAlert('error', 'Passwords do not match. Please re-enter.'); return; }
+            if (!agreed)             { showAlert('error', 'Please accept the Terms of Service to continue.'); return; }
+
+            setLoading(btn, true, 'Creating Account\u2026');
+            clearAlert();
+            try {
+                const user = await signUpUser(name, email, password);
+                showSuccessAndRedirect('Account created! Welcome, ' + user.displayName + '! \uD83C\uDF89', 'index.html');
+            } catch (err) {
+                showAlert('error', err.message);
+                setLoading(btn, false, 'Create Free Account');
+            }
+        }
+
+        async function handleGoogleAuth() {
+            const btn = document.getElementById('googleBtn');
+            setLoading(btn, true, '  Connecting to Google\u2026');
+            clearAlert();
+            try {
+                const user = await loginWithGoogle();
+                showSuccessAndRedirect('Welcome, ' + user.displayName + '! \uD83C\uDFAC', 'index.html');
+            } catch (err) {
+                showAlert('error', err.message);
+                setLoading(btn, false, 'Continue with Google');
+            }
+        }
+
+        function handleGuestLogin() {
+            loginAsGuest();
+            window.location.href = 'index.html';
+        }
+
+        async function handleReset(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value.trim();
+            const btn   = document.getElementById('resetSubmitBtn');
+
+            if (!email) { showAlert('error', 'Please enter your email address.'); return; }
+
+            setLoading(btn, true, 'Sending\u2026');
+            clearAlert();
+            try {
+                await sendPasswordReset(email);
+                showAlert('success', 'Reset email sent to ' + email + '. Check your inbox (and spam folder).');
+                document.getElementById('resetForm').reset();
+            } catch (err) {
+                showAlert('error', err.message);
+            } finally {
+                setLoading(btn, false, 'Send Reset Email');
+            }
+        }
+
+
+        /* ====================================================
+           6. UTILITIES
+        ==================================================== */
+
+        function showAlert(type, msg) {
+            const el = document.getElementById('authAlert');
+            el.className = 'auth-alert ' + type;
+            el.textContent = msg;
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function clearAlert() {
+            const el = document.getElementById('authAlert');
+            el.className = 'auth-alert';
+            el.textContent = '';
+        }
+
+        function setLoading(btn, loading, text) {
+            btn.disabled = loading;
+            btn.textContent = text;
+            btn.style.opacity = loading ? '0.75' : '1';
+        }
+
+        function togglePwd(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '&#x1F648;';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '&#x1F441;';
+            }
+        }
+
+        function updatePasswordStrength(value) {
+            const fill = document.getElementById('pwdStrengthFill');
+            const text = document.getElementById('pwdStrengthText');
+
+            if (!value) {
+                fill.className = 'pwd-strength-fill';
+                text.textContent = '';
+                return;
+            }
+
+            let score = 0;
+            if (value.length >= 8) score++;
+            if (/[A-Z]/.test(value)) score++;
+            if (/[0-9]/.test(value)) score++;
+            if (/[^A-Za-z0-9]/.test(value)) score++;
+
+            const levels = [
+                { cls: 'weak',   label: 'Weak \u2014 too short or simple' },
+                { cls: 'fair',   label: 'Fair \u2014 add numbers or symbols' },
+                { cls: 'good',   label: 'Good \u2014 almost there!' },
+                { cls: 'strong', label: 'Strong password \u2713' }
+            ];
+            const idx   = Math.max(0, Math.min(score - 1, 3));
+            const level = levels[idx];
+            fill.className = 'pwd-strength-fill ' + level.cls;
+            text.textContent = level.label;
+        }
+
+        function showSuccessAndRedirect(message, url) {
+            const overlay  = document.getElementById('successOverlay');
+            const formArea = document.getElementById('mainFormArea');
+            const titleEl  = document.getElementById('successTitle');
+            const bar      = document.getElementById('redirectBar');
+
+            titleEl.textContent = message;
+            formArea.style.display = 'none';
+            overlay.classList.add('show');
+
+            requestAnimationFrame(() => {
+                bar.style.width = '100%';
+            });
+
+            setTimeout(() => {
+                window.location.href = url;
+            }, 2200);
+        }
+    </script>
+
+</body>
+</html>

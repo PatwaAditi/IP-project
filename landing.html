@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to CineVault - Discover movies and series, compare where to stream legally across Netflix, Prime Video, JioHotstar, and build your personalized watchlist.">
+    <title>CineVault | Discover Where to Watch Movies & TV Series</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="landing-body">
+
+    <!-- LANDING NAVBAR -->
+    <header class="landing-navbar">
+        <a href="landing.html" class="logo" aria-label="CineVault Home">
+            <div class="logo-badge">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <span>CineVault</span>
+                <span class="tagline-pill">Discover</span>
+            </div>
+        </a>
+
+        <nav class="landing-nav-links" aria-label="Landing page sections">
+            <a href="#features" class="landing-nav-link">Features</a>
+            <a href="#howItWorks" class="landing-nav-link">How It Works</a>
+            <a href="#faq" class="landing-nav-link">FAQ</a>
+            <a href="index.html" class="landing-nav-link">Browse Database</a>
+        </nav>
+
+        <div class="landing-nav-actions" id="landingNavActions">
+            <a href="login.html?mode=login" class="nav-login-btn" id="navLoginBtn">Sign In</a>
+            <a href="login.html?mode=signup" class="nav-cta-btn" id="navSignupBtn">Get Started Free</a>
+        </div>
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <section class="landing-hero">
+        <div class="landing-hero-backdrop-glow"></div>
+
+        <div class="landing-hero-content">
+            <div class="landing-pill">
+                <span>✨</span>
+                <span>THE ULTIMATE STREAMING DISCOVERY DATABASE</span>
+            </div>
+
+            <h1 class="landing-hero-title">
+                Never Wonder Where to <span class="gradient-text">Stream Again.</span>
+            </h1>
+
+            <p class="landing-hero-subtext">
+                Explore 80+ curated movies and TV series across Hollywood, Indian cinema, and global hits. Check real-time legal streaming availability on Netflix, Prime Video, JioHotstar, and build your personalized watchlist.
+            </p>
+
+            <div class="landing-hero-ctas">
+                <a href="login.html?mode=signup" class="btn-hero-primary" id="heroSignupCta">
+                    <span>🚀 Create Free Account</span>
+                </a>
+                <a href="index.html" class="btn-hero-secondary">
+                    <span>🎬 Browse App as Guest</span>
+                </a>
+            </div>
+
+            <!-- Supported Platforms Bar -->
+            <div class="streaming-ticker-wrap">
+                <span class="ticker-label">Official Legal Providers</span>
+                <div class="ticker-platforms">
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#E50914" d="M5.398 0v24c1.848-.54 3.737-1.127 5.672-1.74V0H5.398zm7.532 0v21.57c1.92-.614 3.823-1.229 5.672-1.846V0H12.93z"/><polygon fill="#B20710" points="11.07 0 11.07 22.26 12.93 21.67 12.93 0"/></svg>
+                        Netflix
+                    </span>
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#00A8E1" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5c-3.14 0-5.74-1.9-6.66-4.6.21-.15.48-.25.75-.25.4 0 .78.18 1.03.49.62 1.95 2.5 3.36 4.88 3.36 2.06 0 3.77-1.04 4.54-2.58l1.45.73C17.84 15.65 15.62 16.5 13 16.5zm3.78-7.85l-1.06 1.06a4.5 4.5 0 0 0-6.36 0l-1.06-1.06a6 6 0 0 1 8.48 0z"/></svg>
+                        Prime Video
+                    </span>
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#1E5CFF" d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                        JioHotstar
+                    </span>
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#F5F5F7" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.16c.65-.8 1.1-1.92.97-3.04-.96.04-2.11.64-2.79 1.44-.6.69-1.12 1.83-.98 2.93 1.07.08 2.16-.54 2.8-1.33z"/></svg>
+                        Apple TV+
+                    </span>
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#7C25E2"/><path fill="#FFF" d="M8 8h8l-8 8h8"/></svg>
+                        ZEE5
+                    </span>
+                    <span class="ticker-platform-item">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        YouTube
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- STATS STRIP -->
+    <div class="landing-stats-strip">
+        <div class="landing-stat-card">
+            <div class="stat-value">80+</div>
+            <div class="stat-title">Movies & TV Series</div>
+        </div>
+        <div class="landing-stat-card">
+            <div class="stat-value">7+</div>
+            <div class="stat-title">Streaming Platforms</div>
+        </div>
+        <div class="landing-stat-card">
+            <div class="stat-value">12</div>
+            <div class="stat-title">Curated Genres</div>
+        </div>
+        <div class="landing-stat-card">
+            <div class="stat-value">100%</div>
+            <div class="stat-title">Free & Legal Discovery</div>
+        </div>
+    </div>
+
+
+    <!-- FEATURES BENTO GRID -->
+    <section class="landing-section" id="features">
+        <div class="landing-section-header">
+            <span class="landing-section-badge">Why CineVault</span>
+            <h2 class="landing-section-title">Built for Cinephiles & Casual Viewers</h2>
+            <p class="landing-section-desc">
+                Everything you need to spend less time scrolling through streaming apps and more time watching great stories.
+            </p>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Large Card 1 -->
+            <div class="bento-card featured-bento">
+                <div class="bento-icon">📡</div>
+                <h3 class="bento-title">Find Where to Watch Legally</h3>
+                <p class="bento-desc">
+                    CineVault indexes official legal streaming providers. We don't host or stream movies directly—we connect you safely to official services like Netflix, Prime Video, JioHotstar, and Apple TV+ with one click.
+                </p>
+                <div class="bento-preview-badges">
+                    <span class="bento-pill">✓ Verified Official Links</span>
+                    <span class="bento-pill">✓ No Piracy</span>
+                    <span class="bento-pill">✓ Regional Provider Tags</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bento-card">
+                <div class="bento-icon">🔖</div>
+                <h3 class="bento-title">Your Personal Vault</h3>
+                <p class="bento-desc">
+                    Save titles to your watchlist with a single click. Keep track of recently viewed movies and access your bookmarks anytime.
+                </p>
+                <div class="bento-preview-badges">
+                    <span class="bento-pill">✓ Account Sync</span>
+                    <span class="bento-pill">✓ Offline LocalStorage</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bento-card">
+                <div class="bento-icon">⚡</div>
+                <h3 class="bento-title">Lightning-Fast Live Search</h3>
+                <p class="bento-desc">
+                    Search by title, genre, release year, or medium. Filter results dynamically as you type with zero page reloads.
+                </p>
+                <div class="bento-preview-badges">
+                    <span class="bento-pill">✓ Keyboard Shortcut '/'</span>
+                    <span class="bento-pill">✓ Instant Matching</span>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bento-card">
+                <div class="bento-icon">🎭</div>
+                <h3 class="bento-title">Multi-Genre Exploration</h3>
+                <p class="bento-desc">
+                    Filter by 12 comprehensive genres: Sci-Fi, Superhero, Indian Cinema, Horror, Thriller, Drama, and Animation.
+                </p>
+                <div class="bento-preview-badges">
+                    <span class="bento-pill">✓ Hollywood Blockbusters</span>
+                    <span class="bento-pill">✓ Acclaimed Indian Cinema</span>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="bento-card">
+                <div class="bento-icon">⭐</div>
+                <h3 class="bento-title">Verified Ratings & Metadata</h3>
+                <p class="bento-desc">
+                    Check IMDb audience ratings, season/episode counts, audio languages, and plot overviews before you hit play.
+                </p>
+                <div class="bento-preview-badges">
+                    <span class="bento-pill">✓ Top 250 Cinema</span>
+                    <span class="bento-pill">✓ Binge-Worthy Series</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- HOW IT WORKS (3 Simple Steps) -->
+    <section class="landing-section" id="howItWorks">
+        <div class="landing-section-header">
+            <span class="landing-section-badge">Simple 3-Step Flow</span>
+            <h2 class="landing-section-title">How CineVault Works</h2>
+            <p class="landing-section-desc">
+                From finding a recommendation to watching it on your favorite service in under 30 seconds.
+            </p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Discover or Search</h3>
+                <p class="step-desc">
+                    Browse Trending titles, Top Rated gems, or filter by your favorite genre and release year.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Compare Streaming Platforms</h3>
+                <p class="step-desc">
+                    Open the details modal to see which official services (Netflix, Prime, JioHotstar, etc.) offer the title.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Stream or Bookmark</h3>
+                <p class="step-desc">
+                    Click "Watch" to jump straight to the provider's official site, or add it to your CineVault Watchlist for later.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FAQ SECTION -->
+    <section class="landing-section" id="faq">
+        <div class="landing-section-header">
+            <span class="landing-section-badge">Frequently Asked Questions</span>
+            <h2 class="landing-section-title">Got Questions? We’ve Got Answers.</h2>
+            <p class="landing-section-desc">
+                Everything first-time visitors should know about how CineVault operates.
+            </p>
+        </div>
+
+        <div class="faq-wrap">
+            <div class="faq-item active">
+                <button class="faq-question-btn">
+                    <span>Does CineVault stream movies or series directly?</span>
+                    <span class="faq-toggle-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    No. CineVault is an informational discovery and tracking database. We do NOT host or stream video files. Our purpose is to help you discover great movies and series, view high-quality details, and find the official, legal platforms (like Netflix or Amazon Prime Video) where they can be watched.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question-btn">
+                    <span>Is CineVault completely free to use?</span>
+                    <span class="faq-toggle-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Yes, CineVault is 100% free! You don’t need to pay for an account or subscription to browse titles, use filters, or save to your watchlist. Note that external streaming platforms (e.g., Netflix) may require their own respective subscriptions.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question-btn">
+                    <span>Why should I create an account with Firebase?</span>
+                    <span class="faq-toggle-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Creating an account allows you to securely save your personalized watchlist, preserve your viewing preferences, and access your saved list across devices. However, you are also welcome to browse CineVault as a guest anytime!
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question-btn">
+                    <span>Which streaming platforms are included?</span>
+                    <span class="faq-toggle-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    CineVault indexes major global and Indian streaming services, including Netflix, Amazon Prime Video, JioHotstar, Apple TV+, SonyLIV, ZEE5, and YouTube Movies.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question-btn">
+                    <span>Can I filter by multiple genres?</span>
+                    <span class="faq-toggle-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Yes! Many titles belong to multiple genres (for example, "Sci-Fi" and "Thriller"). When you select a genre pill, CineVault intelligently checks all associated genres for every title.
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BOTTOM CTA BANNER -->
+    <section class="landing-section" style="padding-top: 20px;">
+        <div class="landing-cta-banner">
+            <div class="cta-banner-glow"></div>
+            <div class="cta-banner-content">
+                <span class="hero-badge" style="margin-bottom: 16px; display: inline-block;">START DISCOVERING TODAY</span>
+                <h2 style="font-size: clamp(26px, 3.8vw, 42px); font-weight: 800; margin-bottom: 14px; letter-spacing: -1px;">
+                    Ready to Find Your Next Movie Night Pick?
+                </h2>
+                <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.6;">
+                    Join CineVault to discover where to stream 80+ top films and series in seconds.
+                </p>
+                <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                    <a href="login.html?mode=signup" class="btn-hero-primary">Create Free Account</a>
+                    <a href="index.html" class="btn-hero-secondary">Explore Database Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="logo-badge" style="width: 30px; height: 30px;">
+                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                            <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                        </svg>
+                    </div>
+                    <span>CineVault</span>
+                </div>
+                <p class="footer-desc">
+                    Your universal destination for movie and TV series discovery. We help viewers find legal, authorized platforms to stream their favorite titles worldwide.
+                </p>
+            </div>
+
+            <div class="footer-links-group">
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="landing.html#features">Features</a></li>
+                        <li><a href="landing.html#howItWorks">How It Works</a></li>
+                        <li><a href="landing.html#faq">FAQ</a></li>
+                        <li><a href="index.html">Discover App</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Account</h4>
+                    <ul>
+                        <li><a href="login.html?mode=login">Sign In</a></li>
+                        <li><a href="login.html?mode=signup">Create Account</a></li>
+                        <li><a href="index.html#watchlistSection">My Watchlist</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Notice</h4>
+                    <ul>
+                        <li><a href="javascript:void(0)">Privacy Policy</a></li>
+                        <li><a href="javascript:void(0)">Terms of Service</a></li>
+                        <li><a href="javascript:void(0)">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 CineVault • Discover. Compare. Watch.</span>
+            <span>All trademarks and platform logos belong to their respective owners.</span>
+        </div>
+    </footer>
+
+    <!-- Firebase & Auth Scripts (deferred to bottom so page renders first) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+
+    <!-- Interactive Scripts for Landing -->
+    <script>
+        // Interactive FAQ Accordion
+        document.querySelectorAll('.faq-question-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.faq-item');
+                const wasActive = item.classList.contains('active');
+                
+                // Close other items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Dynamic Auth state in navbar — safe: onAuthChange defined in auth.js loaded above
+        if (typeof onAuthChange === 'function') {
+            onAuthChange((user) => {
+                const actions = document.getElementById('landingNavActions');
+                if (!actions) return;
+                if (user && !user.isAnonymous) {
+                    const name = user.displayName || user.email.split('@')[0];
+                    actions.innerHTML = `
+                        <div class="nav-user-pill" onclick="window.location.href='index.html'" style="cursor:pointer;">
+                            <div class="user-avatar-dot">${name.charAt(0).toUpperCase()}</div>
+                            <span class="user-nav-name">${name}</span>
+                        </div>
+                        <a href="index.html" class="nav-cta-btn">Launch App &#x2197;</a>
+                    `;
+                } else {
+                    actions.innerHTML = `
+                        <a href="login.html?mode=login" class="nav-login-btn">Sign In</a>
+                        <a href="login.html?mode=signup" class="nav-cta-btn">Get Started Free</a>
+                    `;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
